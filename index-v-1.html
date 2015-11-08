@@ -1,0 +1,138 @@
+<!doctype html>
+<!--
+-->
+<html>
+	<head>
+		<title>HV Games</title>
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+	
+		<!-- <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script> -->
+		<!-- <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script> -->
+		<!-- <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script> -->
+		<!-- <script src='bower_components/firebase/firebase.js'></script> -->
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+		<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		
+		<link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
+		<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<!-- 		<link rel="import" href="elements/anth-header.html">
+		<link rel="import" href="elements/anth-presentation.html"> -->
+
+		<!-- needed for Material Design "body" classes -->
+		<link rel="import" href="bower_components/paper-styles/paper-styles.html">
+		<link rel="import" href="bower_components/paper-button/paper-button.html">
+		<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+		<link rel="import" href="bower_components/paper-input/paper-input.html">
+		
+		<style>
+
+			body {
+				background-color: silver;
+			}
+
+			html, body {
+				margin:0;
+			}
+		</style>
+
+	</head>
+
+	<body class="fullbleed layout vertical">
+
+		<paper-button data-dialog="none" id="login_guest" onclick="clickLogout()">Logout</paper-button>
+		<paper-button data-dialog="dialogAnon" id="btn_anon" raised onclick="clickHandlerAnon(event)">Would you like to play a game?</paper-button>
+		<div id="user_name"></div>
+		<paper-dialog id="dialogAnon" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop class="colored" modal>
+			<paper-dialog-scrollable>
+				<h2>Login</h2>
+				<p>Please provide a screen Display Name</p>
+				<form is="iron-form" id="anon_form">
+					<paper-input id="displayNameAnon" name="displayName" label="Display Name" bind-value="{{displayName}}" required error-message="Value Required"></paper-input>
+					<br>
+					<div class="flex"></div>
+					<paper-button id="anonCancel" dialog-dismiss>Cancel</paper-button>
+					<paper-button onclick="clickHandlerAnonLogin(event)">Login</paper-button>
+				</form>
+			</paper-dialog-scrollable>
+		</paper-dialog>
+
+		
+		<script>
+			// Set the database 
+			var rootRef = new Firebase('https://hudsonvalleygdg.firebaseio.com');
+			var form_scope_anon = document.querySelector('#anon_form');
+			
+			// ********************************************************************************************************************
+			// Login Clicks Handlers
+			// ********************************************************************************************************************
+			// Anonymous
+			function clickHandlerAnon(event) {
+				rootRef.onAuth(function(authData) {
+				  if (authData) {
+					console.log("Authenticated with uid:", authData.uid);
+					var usersWithID = rootRef.child('users').child(authData.uid);
+					usersWithID.once('value', function(dataSnapshot) {
+						// handle read data.
+						if (dataSnapshot.exists()) {
+							console.log(dataSnapshot.val());
+							document.getElementById("user_name").innerHTML = dataSnapshot.val().displayName;
+						}
+					});
+				  } else {
+					var button = event.target;
+					var dialog =  buttonDialog(button);
+					if (dialog) {
+						dialog.open();
+					}
+				 }
+				});
+			};
+			
+			// Get Dialog for a Button
+			function buttonDialog(button) {
+				while (!button.hasAttribute('data-dialog') && button !== document.body) {
+					button = button.parentElement;
+				}
+
+				if (!button.hasAttribute('data-dialog')) {
+					return;
+				}
+
+				var id = button.getAttribute('data-dialog');
+				var dialog = document.getElementById(id);
+				return dialog;
+			};
+	
+			// Handle Request for Display Name for Anon login
+			function clickHandlerAnonLogin(event) {
+				//if (form_scope_anon.validate()) {
+					console.log("Client unauthenticated.");
+					rootRef.authAnonymously(function(error, authData) {
+					  if (error) {
+						console.log("Authentication Failed!", error);
+					  } else {
+						console.log("Authenticated successfully with payload:", authData);
+						var usersWithID = rootRef.child('users').child(authData.uid);
+						usersWithID.update({"displayName":form_scope_anon.displayName.bindValue});
+						// close the dialog
+						document.getElementById("user_name").innerHTML = form_scope_anon.displayName.bindValue;
+						document.getElementById('anonCancel').click();
+					  }
+					});
+				//}
+			};
+			
+			
+			function clickLogout() {
+				console.log("logged out");
+				rootRef.unauth();
+			};
+
+		</script>
+	</body>
+</html>
