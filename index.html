@@ -15,7 +15,9 @@
 		<!-- <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script> -->
 		<!-- <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script> -->
 		<!-- <script src='bower_components/firebase/firebase.js'></script> -->
-		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+		<!-- <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script> -->
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 		<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 		
 		<link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
@@ -31,7 +33,6 @@
 		<link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
 		<link rel="import" href="bower_components/paper-drawer-panel/paper-drawer-panel.html">
 		<link rel="import" href="bower_components/paper-material/paper-material.html">
-		<link rel="import" href="elements/hvgdg-gameboard/hvgdg-gameboard.html">
   
 		<style>
 
@@ -78,16 +79,32 @@
 	  }
 	  #scoreCard {
 		background-color: white;
-		margin: 10px;
+		margin-top: 10px;
+		margin-left: 10px;
+		margin-right: 10px;
 		padding: 5px;
 		display: flex;
 	  }
-	  #gameBoard {
+	#buttonArea {
+		background-color: white;
+		padding: 5px;
+		display: flex;
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	  #ajcgameBoard {
 		background-color: white;
 		margin: 10px;
 		padding: 5px;
 		display: flex;
 		min-height: 480px;
+	  }
+	  #ajcGB {
+		display: none;
+	  }
+	  #waitP {
+		display: none;
 	  }
 	  #scoreBoard_right {
 		padding: 25px;
@@ -107,7 +124,74 @@
 		.name_score {
 			width: 100px;
 		}
+		#turn_over, #new_game {
+			--paper-button: {
+				background-color: lightblue;
+				border-color: #eea236;
+			}
+		}
 		</style>
+<style>
+	table#gameboard {
+		border: 0px solid red;
+		border-collapse: collapse;
+		margin: 0px;
+		padding: 0px;
+		cellspacing: 0px;
+		cellpadding: 0px;
+	}
+
+	table.cell {
+		border: 0px solid blue;
+		border-collapse: collapse;
+		margin: 0px;
+		padding: 0px;
+		cellspacing: 0px;
+		cellpadding: 0px;
+	}
+
+	table {
+	  border: 1px solid orange;
+	  border-spacing: 0px;
+	  border-collapse: collapse;
+	  margin: 0px;
+	  padding: 0px;
+	  cellspacing: 0px;
+	  cellpadding: 0px;
+	}
+
+	div.left_leg {
+		width: 5px;
+		height: 50px;
+	}
+
+	div.right_leg {
+		width: 5px;
+		height: 50px;
+	}
+
+	div.top_leg {
+		width: 50px;
+		height: 5px;
+	}
+
+	div.bottom_leg {
+		width: 50px;
+		height: 5px;
+	}
+
+	div.center_box {
+		width: 50px;
+		height: 50px;
+		pointer-events: none;
+	}
+	div.none {
+			border: 1px solid #000000;
+	}
+	.ajc {
+		background-color: black;
+	}
+</style>
 	</head>
 
 	<body class="fullbleed layout vertical">
@@ -117,40 +201,186 @@
 			</div>
 			<div class="content">
 				<paper-drawer-panel id="paperDrawerPanel" responsive-width='1170px'>
-					<div drawer class="local_drawer"><h2>Instructions</h2>
+					<div drawer class="local_drawer"><h2>Rules</h2>
+					 
+Each player takes it in turns to draw a line that joins two dots (either horizontally or vertically).<br><br>
+ 
+When a player completes a whole box, he or she gets to identify ownership of that box with his color. The person who completes the box takes the next turn after identifying it.
+ <br><br>
+When the whole grid is filled with boxes, the game is over and the person who has made the most boxes wins.
 					</div>
 					<div main>
 						<paper-drawer-panel id="paperDrawerPanel2" right-drawer responsive-width='910px'>
-							<div drawer class="local_drawer"><h2>Leader board</h2> 
+							<div drawer class="local_drawer">
+							<img src="images/hs_dribbble.jpg" style="width:100%;"></img>
 							</div>
 							<div main style="min-width:500px">
-								<paper-material id="scoreCard" elevation="1">
-									<div id="scoreBoard_left">
-										<h2><span id="player1">Player 1</span>
-										Verses
-										<span id="player2">Player 2</span>
-										</h2>
-										<p class="paper-font-body2" id="turnText">Your turn.</p>
+								<paper-material elevation="1">
+									<div id="scoreCard">
+										<div id="scoreBoard_left">
+											<h2><span id="player1">Player 1</span>
+											Verses
+											<span id="player2">Player 2</span>
+											</h2>
+											<p class="paper-font-body2" id="turnText">Your turn.</p>
+										</div>
+										<div class="flex"></div>
+										<div id="scoreBoard_right">
+											<div class="player_score"><div class="flex"></div><div id="player1_score" class="name_score">Player 1</div>
+												<span> </span><input readonly></input></div>
+											<div class="player_score"><div class="flex"></div><div id="player2_score" class="name_score">Player 2</div>
+												<span> </span><input readonly></input></div>
+										</div>
 									</div>
-									<div class="flex"></div>
-									<div id="scoreBoard_right">
-										<div class="player_score"><div class="flex"></div><div id="player1_score" class="name_score">Player 1</div>
-											<span> </span><input readonly></input></div>
-										<div class="player_score"><div class="flex"></div><div id="player2_score" class="name_score">Player 2</div>
-											<span> </span><input readonly></input></div>
+									<div id="buttonArea">
+										<paper-button raised data-dialog="none" id="new_game" onclick="testIPad()" style="background-color: lightblue;">Start a game</paper-button>
+										<paper-button paper-drawer-toggle raised style="background-color: lightblue;">toggle drawer</paper-button>
 									</div>
 								</paper-material>
-								<paper-material id="gameBoard" elevation="1">
-									Content goes here...
+								<paper-material id="ajcgameBoard" elevation="1">
+									<div id="waitP">
+										<h2>Waiting on another player ... </h2>
+									</div>
+									<div id="ajcGB">
+									<!--
 									<paper-button data-dialog="none" id="login_guest" onclick="clickLogout()">Logout</paper-button>
-									<paper-button data-dialog="none" id="turn_over" onclick="endTurn()">End Turn</paper-button>
+									-->
+									<paper-button raised data-dialog="none" id="turn_over" onclick="endTurn()" style="background-color: lightblue; height: 10%;">End Turn</paper-button>
 									<!-- 
 									<paper-button data-dialog="dialogAnon" id="btn_anon" raised onclick="clickHandlerAnon(event)">Would you like to play a game?</paper-button>
 									-->
-									<div id="user_name"></div>
+									<div id="user_name" center center >
 <!-- ************************************************************************ -->
-<hvgdg-gameboard></hvgdg-gameboard>
+<table id="gameboard">
+  <tr>
+    <td>
+      <table class="cell" id="cell_0_0" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)"/></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(0,0)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="cell" id="cell_1_0" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(1,0)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="cell" id="cell_2_0" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(2,0)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="cell" id="cell_0_1" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(0,1)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="cell" id="cell_1_1" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(1,1)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="cell" id="cell_2_1" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(2,1)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="cell" id="cell_0_2" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(0,2)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="cell" id="cell_1_2" data-count="4">
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(1,2)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="cell" id="cell_2_2" data-count="4">
+        <tbody>
+        <tr>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        <tr>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(2,2)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
+        </tr>
+        <tr>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</table>
 <!-- ************************************************************************ -->
+									</div>
+									</div>
 								</paper-material>
 							</div>
 						</paper-drawer-panel>
@@ -182,7 +412,12 @@
 			var gameID;
 			var gamePlayersRef;
 			var namesUpdated = false;
-			
+
+			var board_width = 3;
+			var board_height = 3;
+			//var newrootRef = new Firebase('https://hudsonvalleygdg.firebaseio.com/games');
+			var jsrootRef;
+	
 			rootRef.onAuth(function(authData) {
 				  if (authData) {
 					thisAuthID = authData.uid;
@@ -204,7 +439,33 @@
 					}
 				 }
 			});
-				
+			
+			function testIPad() {
+				var e1 = document.getElementById("waitP");
+				//e1.style.display == 'none';
+				e1.setAttribute("style", "display: none;");
+				var e2 = document.getElementById("ajcGB");
+				//e2.style.display == 'none';
+				e2.setAttribute("style", "display: none;");
+				clickLogout();
+				var dialog =  document.getElementById('dialogAnon');
+				if (dialog) {
+					dialog.open();
+				}
+				rootRef.child('gamesAvailable').once('value', function(dataSnapshot) {
+						// handle read data.
+						if (dataSnapshot.exists()) {
+							dataSnapshot.forEach(function(childSnapshot) {
+								var key = childSnapshot.key();
+								var tempGameID = childSnapshot.child('game').val();
+								if (tempGameID === gameID) {
+									// remove the game
+									rootRef.child('gamesAvailable').child(key).remove();
+								}
+							});
+						}
+					});
+			};
 			/*
 			// ********************************************************************************************************************
 			// Login Clicks Handlers
@@ -285,6 +546,10 @@
 								// Set your opponent's name and game ID
 								//opponent = childSnapshot.child('opponent').val();
 								gameID = childSnapshot.child('game').val();
+								jsrootRef = rootRef.child('games').child(gameID);
+								jsrootRef.child("board").on('child_added', function(dataSnapshot) {
+										otherPlayer(dataSnapshot);
+									});
 								// add the new player to the game
 								rootRef.child('games').child(gameID).child('players/'+thisAuthID).set({'name': thisUser });
 								// set turnText
@@ -295,6 +560,14 @@
 								gamePlayersRef.on('value', function(dataSnapshot) {
 									processPlayers(dataSnapshot);
 								});
+								
+								var e1 = document.getElementById("waitP");
+								console.log(e1);
+								e1.setAttribute("style", "display: none;");
+								//e1.style.display == 'none';
+								var e2 = document.getElementById("ajcGB");
+								//e2.style.display == 'block';
+								e2.setAttribute("style", "display: block;");
 								return true;
 							});
 							
@@ -313,6 +586,10 @@
 							document.getElementById("turnText").innerHTML = "You go first";
 							// save the gameID
 							gameID = newGame.key();
+							jsrootRef = rootRef.child('games').child(gameID);
+							jsrootRef.child("board").on('child_added', function(dataSnapshot) {
+									otherPlayer(dataSnapshot);
+								});
 							//addGameAvail(newGame); 
 							//var gameAvailRef = rootRef.child('gamesAvailable').child(newGame.key());
 							//gameAvailRef.update({"nothing":"none"});
@@ -322,6 +599,13 @@
 							gamePlayersRef.on('value', function(dataSnapshot) {
 								processPlayers(dataSnapshot);
 							});
+							var e1 = document.getElementById("waitP");
+							//e1.style.display == 'block';
+							e1.setAttribute("style", "display: block;");
+							var e2 = document.getElementById("ajcGB");
+							//e2.style.display == 'none';
+							e2.setAttribute("style", "display: none;");
+							
 						}
 					});
 			};
@@ -364,8 +648,285 @@
 					document.getElementById("player2").innerHTML = opponent;
 					document.getElementById("player2_score").innerHTML = opponent;
 					namesUpdated = true;
+					var e1 = document.getElementById("waitP");
+					e1.setAttribute("style", "display: none;");
+					//e1.style.display == 'none';
+					var e2 = document.getElementById("ajcGB");
+					//e2.style.display == 'block';
+					e2.setAttribute("style", "display: block;");
 				}
 			};
-		</script>
+
+// John's code
+
+	function otherPlayer(dataSnapshot) {
+		if(dataSnapshot.child('cell_x').val())
+		console.log(dataSnapshot.child('cell_x').val());
+		colorNeighborLeg(dataSnapshot.child('cell_x').val(), 
+			dataSnapshot.child('cell_y').val(),
+			dataSnapshot.child('cell_leg').val(), false);		
+	};
+	
+    function colorNeighborLeg(cell_x, cell_y, cell_leg, dbUpdate) {
+      // "top_leg", "bottom_leg", "left_leg", "right_leg"
+
+	  if (dbUpdate) {
+		  //console.log(cell_x, cell_y, cell_leg);
+		  jsrootRef.child("board").push({'cell_x':cell_x, 'cell_y': cell_y, 'cell_leg': cell_leg, 'thisAuthID': thisAuthID});
+		} else {
+			var this_id = "cell_" + cell_x + "_" + cell_y;
+            var cell = $("#" + this_id).find("."+cell_leg);
+
+            // Turn of mouse clicks
+            cell.css("pointer-events", "none");
+
+            // Color the div
+            // TODO Needs to be player's chosen color
+            cell.css( "background-color", "#00FFFF" );		
+		}
+	  
+      switch ( cell_leg ) {
+        case "top_leg":
+
+          if ( cell_y > 0 ) {
+
+            // Color left leg of cell to the right
+            var next_y = cell_y - 1;
+            var next_id = "cell_" + cell_x + "_" + next_y;
+            // console.log("coloring: " + next_id);
+
+            // Decrement leg count of the next cell
+            var cell = $("#" + next_id)
+            var count = cell.data("count");
+            count -= 1;
+            cell.data("count", count);
+
+            if ( count == 0) {
+              console.log("Mark the owner");
+              // TODO Needs to be the player's chosen color
+              cell.find(".center_box").css( "background-color", "blue" );
+            }
+
+            var cell = $("#" + next_id).find(".bottom_leg");
+
+            // Turn of mouse clicks
+            cell.css("pointer-events", "none");
+
+            // Color the div
+            // TODO Needs to be player's chosen color
+            cell.css( "background-color", "#00FFFF" );
+            //var item = jsrootRef.child("board").child(next_id).child("bottom_leg");
+            //item.set(1);
+
+          } else {
+            console.log("at board edge - nothing to color");
+          }
+
+          break;
+
+        case "bottom_leg":
+
+          if ( cell_y < (board_height - 1) ) {
+
+            // Color left leg of cell to the right
+            var next_y = cell_y + 1;
+            var next_id = "cell_" + cell_x + "_" + next_y;
+            // console.log("coloring: " + next_id);
+
+            // Decrement leg count of the next cell
+            var cell = $("#" + next_id)
+            var count = cell.data("count");
+            count -= 1;
+            cell.data("count", count);
+
+            if ( count == 0) {
+              console.log("Mark the owner");
+              // TODO Needs to be the player's chosen color
+              cell.find(".center_box").css( "background-color", "blue" );
+            }
+
+            var cell = $("#" + next_id).find(".top_leg");
+
+            // Turn of mouse clicks
+            cell.css("pointer-events", "none");
+
+            // Color the div
+            // TODO Needs to be player's chosen color
+            cell.css( "background-color", "#00FFFF" );
+            //var item = jsrootRef.child("board").child(next_id).child("top_leg");
+            //item.set(1);
+
+          } else {
+            console.log("at board edge - nothing to color");
+          }
+
+          break;
+
+        case "left_leg":
+
+          if ( cell_x > 0 ) {
+
+            // Color left leg of cell to the right
+            var next_x = cell_x - 1;
+            var next_id = "cell_" + next_x + "_" + cell_y;
+            // console.log("coloring: " + next_id);
+
+            // Decrement leg count of the next cell
+            var cell = $("table#" + next_id);
+            var count = cell.data("count");
+            count -= 1;
+            cell.data("count", count);
+
+            if ( count == 0) {
+              console.log("Mark the owner");
+              // TODO Needs to be the player's chosen color
+              cell.find(".center_box").css( "background-color", "blue" );
+            }
+
+            var cell = $("#" + next_id).find(".right_leg");
+
+            // Turn of mouse clicks
+            cell.css("pointer-events", "none");
+
+            // Color the div
+            // TODO Needs to be player's chosen color
+            cell.css( "background-color", "#00FFFF" );
+            //var item = jsrootRef.child("board").child(next_id).child("right_leg");
+            //item.set(1);
+
+          } else {
+            console.log("at board edge - nothing to color");
+          }
+
+          break;
+
+        case "right_leg":
+
+          if ( cell_x < (board_width - 1) ) {
+
+            // Color left leg of cell to the right
+            var next_x = cell_x + 1;
+            var next_id = "cell_" + next_x + "_" + cell_y;
+            // console.log("coloring: " + next_id);
+
+            // Decrement leg count of the next cell
+            var cell = $("#" + next_id);
+            var count = cell.data("count");
+            count -= 1;
+            cell.data("count", count);
+
+            if ( count == 0) {
+              console.log("Mark the owner");
+              // TODO Needs to be the player's chosen color
+              cell.find(".center_box").css( "background-color", "blue" );
+            }
+
+            var cell = $("#" + next_id).find(".left_leg");
+
+            // Turn of mouse clicks
+            cell.css("pointer-events", "none");
+
+            // Color the div
+            // TODO Needs to be player's chosen color
+            cell.css( "background-color", "#00FFFF" );
+            //var item = jsrootRef.child("board").child(next_id).child("left_leg");
+            //item.set(1);
+
+          } else {
+            console.log("at board edge - nothing to color");
+          }
+          break;
+
+        default:
+          break;
+      }
+
+    }
+
+    function parseId(position, id) {
+      var first = id.indexOf("_");
+      var second = id.lastIndexOf("_");
+      var result = id.split("_");
+      if ( position == "x" ) {
+        // console.log("x = " + result[1]);
+        return result[1];
+      } else if ( position == "y") {
+        // console.log("y = " + result[2]);
+        return result[2];
+      } else {
+        // console.log("undefined position");
+        return "undefined position";
+      }
+    }
+function legClick(element) {
+      // Turn of mouse clicks
+      $( element ).css("pointer-events", "none");
+	  console.log(element);
+
+      // Color the div
+      // TODO Needs to be player's chosen color
+      $( element ).css( "background-color", "#00FFFF" );
+
+      var cell = $( element ).closest( ".cell" );
+		
+      var cell_id = cell.attr("id");
+      var cell_leg = $( element ).attr("class");
+console.log(cell_leg);
+      var cell_x = parseId("x", cell_id);
+      var cell_y = parseId("y", cell_id);
+
+      // Need to color neighboring legs
+      // x, y, current_leg_side_selected
+      colorNeighborLeg(parseInt(cell_x), parseInt(cell_y), cell_leg, true);
+
+      var count = cell.data("count");
+      count -= 1;
+      cell.data("count", count);
+
+      if ( count == 0) {
+        console.log("Mark the owner");
+        // TODO Needs to be the player's chosen color
+        cell.find(".center_box").css( "background-color", "blue" );
+      }
+
+      // console.log( cell );
+      console.log( "current count = " + count );
+};
+/*
+    $( "div" ).click(function() {
+      // Turn of mouse clicks
+      $( this ).css("pointer-events", "none");
+
+      // Color the div
+      // TODO Needs to be player's chosen color
+      $( this ).css( "background-color", "#00FFFF" );
+
+      var cell = $( this ).closest( ".cell" );
+
+      var cell_id = cell.attr("id");
+      var cell_leg = $( this ).attr("class");
+
+      var cell_x = parseId("x", cell_id);
+      var cell_y = parseId("y", cell_id);
+
+      // Need to color neighboring legs
+      // x, y, current_leg_side_selected
+      colorNeighborLeg(parseInt(cell_x), parseInt(cell_y), cell_leg);
+
+      var count = cell.data("count");
+      count -= 1;
+      cell.data("count", count);
+
+      if ( count == 0) {
+        console.log("Mark the owner");
+        // TODO Needs to be the player's chosen color
+        cell.find(".center_box").css( "background-color", "blue" );
+      }
+
+      // console.log( cell );
+      console.log( "current count = " + count );
+    });
+*/
+</script>
 		</body>
 </html>

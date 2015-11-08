@@ -15,7 +15,9 @@
 		<!-- <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script> -->
 		<!-- <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script> -->
 		<!-- <script src='bower_components/firebase/firebase.js'></script> -->
-		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+		<!-- <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script> -->
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 		<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 		
 		<link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
@@ -211,42 +213,42 @@
 <!-- ************************************************************************ -->
 <table id="gameboard">
   <tr>
-    <td id="cell_0_0">
+    <td>
       <table class="cell" id="cell_0_0" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)"/></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(0,0)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(0,0)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
     <td>
       <table class="cell" id="cell_1_0" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(1,0)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(1,0)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
     <td>
       <table class="cell" id="cell_2_0" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(2,0)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(2,0)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
@@ -255,39 +257,39 @@
     <td>
       <table class="cell" id="cell_0_1" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(0,1)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(0,1)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
     <td>
       <table class="cell" id="cell_1_1" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(1,1)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(1,1)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
     <td>
       <table class="cell" id="cell_2_1" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(2,1)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(2,1)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
@@ -296,26 +298,26 @@
     <td>
       <table class="cell" id="cell_0_2" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(0,2)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(0,2)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
     <td>
       <table class="cell" id="cell_1_2" data-count="4">
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(1,2)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(1,2)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
       </table>
     </td>
@@ -323,13 +325,13 @@
       <table class="cell" id="cell_2_2" data-count="4">
         <tbody>
         <tr>
-          <td class="ajc"></td><td><div class="top_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="top_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         <tr>
-          <td><div class="left_leg" /></td><td><div class="center_box">(2,2)</div></td><td><div class="right_leg" /></td>
+          <td><div class="left_leg" onclick="legClick(this)" /></td><td><div class="center_box">(2,2)</div></td><td><div class="right_leg" onclick="legClick(this)" /></td>
         </tr>
         <tr>
-          <td class="ajc"></td><td><div class="bottom_leg" /></td><td class="ajc"></td>
+          <td class="ajc"></td><td><div class="bottom_leg" onclick="legClick(this)" /></td><td class="ajc"></td>
         </tr>
         </tbody>
       </table>
@@ -560,8 +562,9 @@
 
     function colorNeighborLeg(cell_x, cell_y, cell_leg) {
       // "top_leg", "bottom_leg", "left_leg", "right_leg"
-
-      //console.log(cell_x, cell_y, cell_leg);
+	  var backColor = "blue";
+	  
+      console.log(cell_x, cell_y, cell_leg);
 
       switch ( cell_leg ) {
         case "top_leg":
@@ -582,7 +585,8 @@
             if ( count == 0) {
               console.log("Mark the owner");
               // TODO Needs to be the player's chosen color
-              cell.find(".center_box").css( "background-color", "#FFFFFF" );
+              //cell.find(".center_box").css( "background-color", "blue" );
+			  cell.find(".center_box").css( "background-color", "blue" );
             }
 
             var cell = $("#" + next_id).find(".bottom_leg");
@@ -618,7 +622,7 @@
             if ( count == 0) {
               console.log("Mark the owner");
               // TODO Needs to be the player's chosen color
-              cell.find(".center_box").css( "background-color", "#FFFFFF" );
+              cell.find(".center_box").css( "background-color", "blue" );
             }
 
             var cell = $("#" + next_id).find(".top_leg");
@@ -654,7 +658,7 @@
             if ( count == 0) {
               console.log("Mark the owner");
               // TODO Needs to be the player's chosen color
-              cell.find(".center_box").css( "background-color", "#FFFFFF" );
+              cell.find(".center_box").css( "background-color", "blue" );
             }
 
             var cell = $("#" + next_id).find(".right_leg");
@@ -690,7 +694,7 @@
             if ( count == 0) {
               console.log("Mark the owner");
               // TODO Needs to be the player's chosen color
-              cell.find(".center_box").css( "background-color", "#FFFFFF" );
+              cell.find(".center_box").css( "background-color", "blue" );
             }
             
             var cell = $("#" + next_id).find(".left_leg");
@@ -728,7 +732,40 @@
         return "undefined position";
       }
     }
+function legClick(element) {
+      // Turn of mouse clicks
+      $( element ).css("pointer-events", "none");
 
+      // Color the div
+      // TODO Needs to be player's chosen color
+      $( element ).css( "background-color", "#00FFFF" );
+
+      var cell = $( element ).closest( ".cell" );
+		
+      var cell_id = cell.attr("id");
+      var cell_leg = $( element ).attr("class");
+
+      var cell_x = parseId("x", cell_id);
+      var cell_y = parseId("y", cell_id);
+
+      // Need to color neighboring legs
+      // x, y, current_leg_side_selected
+      colorNeighborLeg(parseInt(cell_x), parseInt(cell_y), cell_leg);
+
+      var count = cell.data("count");
+      count -= 1;
+      cell.data("count", count);
+
+      if ( count == 0) {
+        console.log("Mark the owner");
+        // TODO Needs to be the player's chosen color
+        cell.find(".center_box").css( "background-color", "blue" );
+      }
+
+      // console.log( cell );
+      console.log( "current count = " + count );
+};
+/*
     $( "div" ).click(function() {
       // Turn of mouse clicks
       $( this ).css("pointer-events", "none");
@@ -756,13 +793,13 @@
       if ( count == 0) {
         console.log("Mark the owner");
         // TODO Needs to be the player's chosen color
-        cell.find(".center_box").css( "background-color", "#FFFFFF" );
+        cell.find(".center_box").css( "background-color", "blue" );
       }
 
       // console.log( cell );
       console.log( "current count = " + count );
     });
-
+*/
 </script>
 		</body>
 </html>
